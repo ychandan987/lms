@@ -99,10 +99,12 @@ export default function Login() {
 
     const response = await axios.post("http://localhost:3000/api/auth/login", formData);
 
-    const token = response.data?.token;
+    const token = response.data?.accessToken;
     const userType = response.data?.userType;
 
     console.log("Login Response:", response.data);
+    console.log("token:", token);
+    
 
     if (token) {
       localStorage.setItem("token", token);
