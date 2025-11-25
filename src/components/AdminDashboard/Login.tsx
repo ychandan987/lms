@@ -114,7 +114,8 @@ export default function Login() {
     if (userType === "admin") {
       setViewMode("view"); // or navigate("/dashboard");
     } else if (userType === "LEARNER") {
-      navigate("/Video");
+      // navigate("/video");
+      alert("Learner logged in, redirecting to Student page.");
     } else {
       console.warn("Unknown userType:", userType);
     }
