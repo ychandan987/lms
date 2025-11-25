@@ -91,28 +91,45 @@ export default function Login() {
   };
 
   const handleLogin = async (formData: {
-    usernameOrEmail: string;
-    password: string;
-  }) => {
-    try {
-      setIsLoading(true);
-      const response = await axios.post(
-        "http://localhost:3000/api/auth/login",
-        formData
-      );    
-      const token_data = JSON.stringify(response);
-      if (token_data) localStorage.setItem("token", token_data);
-      toast.success("Login successful");
-      setViewMode("view");
-    } catch (error: any) {
-      toast.error("Login failed");
-      const msg =
-        error.response?.data?.message || "Something went wrong. Try again.";
-      setError(msg);
-    } finally {
-      setIsLoading(false);
+  usernameOrEmail: string;
+  password: string;
+}) => {
+  try {
+    setIsLoading(true);
+
+    const response = await axios.post("http://localhost:3000/api/auth/login", formData);
+
+    const token = response.data?.token;
+    const userType = response.data?.userType;
+
+    console.log("Login Response:", response.data);
+
+    if (token) {
+      localStorage.setItem("token", token);
     }
-  };
+
+    toast.success("Login successful");
+
+    // Redirect based on userType
+    if (userType === "admin") {
+      setViewMode("view"); // or navigate("/dashboard");
+    } else if (userType === "LEARNER") {
+      navigate("/Video");
+    } else {
+      console.warn("Unknown userType:", userType);
+    }
+
+  } catch (error: any) {
+    console.error(error);
+    const message =
+      error.response?.data?.message || "Something went wrong. Try again.";
+    setError(message);
+    toast.error(message);
+  } finally {
+    setIsLoading(false);
+  }
+};
+
 
   const SignupForm = () => {
     const [showPassword, setShowPassword] = useState(false);
