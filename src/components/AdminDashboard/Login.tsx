@@ -99,7 +99,8 @@ export default function Login() {
 
     const response = await axios.post("http://localhost:3000/api/auth/login", formData);
 
-    const token = response.data?.accessToken;
+    // const token = response.data?.accessToken;
+    const token = response;
     const userType = response.data?.userType;
 
     console.log("Login Response:", response.data);
@@ -107,13 +108,13 @@ export default function Login() {
     
 
     if (token) {
-      localStorage.setItem("token", token);
+      localStorage.setItem("token", JSON.stringify(response));;
     }
 
     toast.success("Login successful");
 
     // Redirect based on userType
-    if (userType === "admin") {
+    if (userType === "ADMIN") {
       setViewMode("view"); // or navigate("/dashboard");
     } else if (userType === "LEARNER") {
       // navigate("/video");
